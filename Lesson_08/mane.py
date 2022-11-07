@@ -5,3 +5,4 @@ def mane_function():
 
 def test_function():
     print('New code of new function!')
+    print('Another code')
