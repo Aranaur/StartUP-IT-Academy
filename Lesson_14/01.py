@@ -1,35 +1,38 @@
-class Tree:
-    def __init__(self, id_node):
-        self.key = id_node
+class Node:
+    def __init__(self, main_root):
+        self.main_root = main_root
         self.left = None
         self.right = None
 
+    def insert(self, data):
+        if self.main_root:
+            if data < self.main_root:
+                if self.left is None:
+                    self.left =Node(data)
+                else:
+                    self.left.insert(data)
+            elif data > self.main_root:
+                if self.right is None:
+                    self.right = Node(data)
+                else:
+                    self.right.insert(data)
+        else:
+            self.main_root.insert(data)
 
-def insert_list(lst, i):
-    """Insert function from a list """
-    root_new = None
+    def print_tree(self):
+        if self.left:
+            self.left.print_tree()
+        print(self.main_root)
+        if self.right:
+            self.right.print_tree()
 
-    # Base case for recursion
-    if i < NUM:
-        root_new = Tree(lst[i])
-
-        # insert left child
-        root_new.left = insert_list(lst, 2 * i + 1)
-
-        # insert right child
-        root_new.right = insert_list(lst, 2 * i + 2)
-    return root_new
+    def list_insert(self, lst):
+        for n in lst:
+            self.insert(n)
 
 
-def inorder(root):
-    """Print tree nodes in inorder fashion"""
-    if root is not None:
-        inorder(root.left)
-        print(root.key, end=" ")
-        inorder(root.right)
-
-
-list_data = [20, 30, 40, 50, 60, 70, 80]
-NUM = len(list_data)
-root_from_list = insert_list(list_data, 0)
-inorder(root_from_list)
+root = Node(10)
+root.print_tree()
+print()
+root.list_insert([70, 60, 40, 50])
+root.print_tree()

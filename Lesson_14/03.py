@@ -43,13 +43,31 @@ class Node:
             self = self.right
         return str(self)
 
+    def delete_node(root, key):
+        if root is None:
+            return root
+        if key < root.main_root:
+            root.left = root.left.delete_node(key)
+        elif key > root.main_root:
+            root.right = root.right.delete_node(key)
+        else:
+            if root.left is None:
+                temp = root.right
+                return temp
+            elif root.right is None:
+                temp = root.left
+                return temp
+            temp = root.right.minValueNode()
+            root.main_root = temp.main_root
+            root.right = root.right.deleteNode(temp.main_root)
+        return root
+
 
 root = Node(10)
 root.print_tree()
 print()
 root.list_insert([70, 60, 40, 50])
 root.print_tree()
-
-print(f'Мінімальне значення: {root.min_value()}')
-print(f'Максимальне значення: {root.max_value()}')
-
+print()
+root.delete_node(50)
+root.print_tree()
