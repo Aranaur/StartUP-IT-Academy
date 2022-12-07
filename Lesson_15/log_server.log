@@ -1,0 +1,16 @@
+server 2022-12-06 20:18:49,651 - INFO - Server started!
+client 2022-12-06 20:18:51,788 - INFO - The client connects to the server
+client 2022-12-06 20:18:51,792 - INFO - Client has joined
+server 2022-12-06 20:18:51,792 - DEBUG - Connected ('127.0.0.1', 57839)
+client 2022-12-06 20:18:54,569 - INFO - Message sent: wow
+server 2022-12-06 20:18:54,570 - DEBUG - Message received: b'wow'
+server 2022-12-06 20:18:54,570 - DEBUG - Sending a message to the user
+client 2022-12-06 20:18:57,049 - INFO - Message sent: Hi!
+server 2022-12-06 20:18:57,049 - DEBUG - Message received: b'Hi!'
+server 2022-12-06 20:18:57,050 - DEBUG - Sending welcome message to the user
+client 2022-12-06 20:19:01,641 - INFO - Message sent: Problem
+server 2022-12-06 20:19:01,642 - DEBUG - Message received: b'Problem'
+server 2022-12-06 20:19:01,642 - ERROR - Sending error message to the user
+client 2022-12-06 20:19:03,338 - WARNING - Input empty massage
+server 2022-12-06 20:19:05,226 - DEBUG - Message received: b''
+server 2022-12-06 20:19:05,226 - WARNING - Input empty massage
