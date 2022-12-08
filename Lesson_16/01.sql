@@ -1,2 +1,1 @@
-use pds;
-SELECT * FROM employees ORDER BY FIRST_NAME
+SELECT * FROM pds.employees ORDER BY FIRST_NAME
