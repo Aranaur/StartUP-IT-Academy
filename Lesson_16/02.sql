@@ -1,0 +1,2 @@
+use pds;
+SELECT FIRST_NAME, LAST_NAME, SALARY, SALARY * 0.15 as TAX FROM employees

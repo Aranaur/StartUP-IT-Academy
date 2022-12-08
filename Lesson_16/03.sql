@@ -1,0 +1,2 @@
+use pds;
+SELECT SUM(SALARY) AS TOTAL FROM employees
