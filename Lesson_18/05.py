@@ -18,13 +18,13 @@ mycursor.execute('SELECT * FROM student')
 stud_result = mycursor.fetchall()
 
 for i in stud_result:
-    print(row)
+    print(i)
 
 mycursor.execute('SELECT * FROM employee')
 empl_result = mycursor.fetchall()
 
 for i in empl_result:
-    print(row)
+    print(i)
 
 mycursor.close()
 mydb.close()
