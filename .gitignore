@@ -9,3 +9,5 @@ Lesson_55/data/MNIST/raw/train-images-idx3-ubyte
 Lesson_55/data/MNIST/raw/train-images-idx3-ubyte.gz
 Lesson_55/data/MNIST/raw/train-labels-idx1-ubyte
 Lesson_55/data/MNIST/raw/train-labels-idx1-ubyte.gz
+Lesson_62/data/
+Lesson_62/cifar-10-batches-py/
