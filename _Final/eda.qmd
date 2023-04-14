@@ -4,6 +4,10 @@
 
 ```{python}
 import pandas as pd
+import datetime
+import matplotlib.pyplot as plt
+import seaborn as sns
+import plotly.express as px
 ```
 
 ## Вхідні дані
@@ -31,14 +35,116 @@ import pandas as pd
 #| column: screen-inset-shaded
 #| tbl-cap: 'Вхідні дані'
 df = pd.read_excel('00_data/ukr_cars.xlsx')
-df
+df.head()
 ```
-
 
 ```{python}
 df.info()
 ```
 
 ```{python}
+df.describe()
+```
+
+```{python}
 df.isna().sum()
+```
+
+```{python}
+df['Age'] = datetime.date.today().year - df['Year']
+df.head()
+```
+
+```{python}
+df["Brand"].nunique()
+```
+
+
+```{python}
+df['Brand'].value_counts().head()
+```
+
+```{python}
+#| fig-cap: 'Марки автомобілів, які зустрічаються найчастіше'
+# ax = sns.countplot(
+#     y='Brand',
+#     data=df,
+#     order=df.Brand.value_counts().iloc[:25].index
+#     )
+# ax.set_xlabel("Кількість")
+# ax.set_ylabel("")
+# plt.show()
+
+df_counts = df["Brand"].value_counts().iloc[:25].reset_index()
+df_counts.columns = ["Brand", "count"]
+
+fig = px.bar(df_counts, y="Brand", x="count", orientation="h")
+fig.update_layout(yaxis={'categoryorder':'total ascending'})
+
+fig.update_layout(xaxis_title="Кількість", yaxis_title="", plot_bgcolor='rgba(0,0,0,0)')
+fig.show()
+```
+
+```{python}
+#| fig-cap: 'Марки автомобілів, які зустрічаються найрідше'
+# ax = sns.countplot(
+#     y='Brand',
+#     data=df,
+#     order=df.Brand.value_counts().iloc[:-50:-1].index
+#     )
+# ax.set_xlabel("Кількість")
+# ax.set_ylabel("")
+# plt.show()
+
+df_counts = df["Brand"].value_counts().iloc[:-50:-1].reset_index()
+df_counts.columns = ["Brand", "count"]
+
+fig = px.bar(df_counts, y="Brand", x="count", orientation="h")
+
+fig.update_layout(xaxis_title="Кількість", yaxis_title="", plot_bgcolor='rgba(0,0,0,0)')
+fig.show()
+```
+
+```{python}
+def get_top_models(df, brand, top_n=5):
+    # Відфільтровуємо за брендом
+    df_brand = df[df["Brand"] == brand]
+    
+    # Згрупуємо за моделлю та порахуємо кількість
+    model_counts = df_brand.groupby(by=["Model"]).size().reset_index(name="Count")
+
+    # Відсортуємо та обмежимо результат до top_n найпопулярніших моделей
+    top_models = model_counts.nlargest(top_n, "Count")
+    
+    return top_models
+```
+
+```{python}
+top5_vw_models = get_top_models(df, "Volkswagen")
+top5_bmw_models = get_top_models(df, "BMW")
+top5_mers_models = get_top_models(df, "Mercedes-Benz")
+```
+
+
+```{python}
+#| layout-ncol: 3
+#| fig-cap: 
+#|   - "Volkswagen"
+#|   - "BMW"
+#|   - "Mercedes-Benz"
+volk = sns.catplot(y='Model', x='Count', data=top5_vw_models, kind='bar',
+palette='PRGn', alpha=0.5, legend=False)
+volk.set(xlabel='Кількість', ylabel='Модель автомобіля', title='Volkswagen')
+volk.fig.suptitle("")
+
+bmw = sns.catplot(y='Model', x='Count', data=top5_bmw_models, kind='bar',
+palette='Spectral', alpha=0.5, legend=False)
+bmw.set(xlabel='Кількість', ylabel='Модель автомобіля', title='BMW')
+bmw.fig.suptitle("")
+
+mb = sns.catplot(y='Model', x='Count', data=top5_mers_models, kind='bar',
+palette='BrBG', alpha=0.5, legend=False)
+mb.set(xlabel='Кількість', ylabel='Модель автомобіля', title='Mercedes-Benz')
+mb.fig.suptitle("")
+plt.show()
 ```
