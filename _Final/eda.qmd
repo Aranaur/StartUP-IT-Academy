@@ -4,10 +4,15 @@
 
 ```{python}
 import pandas as pd
+import numpy as np
 import datetime
 import matplotlib.pyplot as plt
 import seaborn as sns
 import plotly.express as px
+from plotnine import *
+
+import warnings
+warnings.filterwarnings("ignore")
 ```
 
 ## Вхідні дані
@@ -51,6 +56,7 @@ df.isna().sum()
 ```
 
 ```{python}
+#| column: screen-inset-shaded
 df['Age'] = datetime.date.today().year - df['Year']
 df.head()
 ```
@@ -132,6 +138,7 @@ top5_mers_models = get_top_models(df, "Mercedes-Benz")
 #|   - "Volkswagen"
 #|   - "BMW"
 #|   - "Mercedes-Benz"
+#| column: page
 volk = sns.catplot(y='Model', x='Count', data=top5_vw_models, kind='bar',
 palette='PRGn', alpha=0.5, legend=False)
 volk.set(xlabel='Кількість', ylabel='Модель автомобіля', title='Volkswagen')
@@ -146,5 +153,53 @@ mb = sns.catplot(y='Model', x='Count', data=top5_mers_models, kind='bar',
 palette='BrBG', alpha=0.5, legend=False)
 mb.set(xlabel='Кількість', ylabel='Модель автомобіля', title='Mercedes-Benz')
 mb.fig.suptitle("")
+plt.show()
+```
+
+
+```{python}
+uaRegionsGrid = pd.DataFrame({
+'row': [1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 5, 5],
+'col': [2, 5, 6, 7, 1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8, 2, 5, 6, 7, 4, 6, 5],
+'code': list(range(1, 28)),
+'name': ["Волинська область", "Київ", "Чернігівська область", "Сумська область", "Львівська область", "Тернопільська область", "Рівненська область", "Житомирська область", "Київська область", "Полтавська область", "Харківська область", "Луганська область", "Закарпатська область", "Івано-Франківська область", "Хмельницька область", "Вінницька область", "Черкаська область", "Кіровоградська область", "Дніпропетровська область", "Донецька область", "Чернівецька область", "Миколаївська область", "Херсонська область", "Запорізька область", "Одеська область", "АР Крим", "м. Севастополь"]
+})
+uaRegionsGrid
+```
+
+
+```{python}
+data_region_quantity = df.groupby('Region').size().reset_index(name='Count')
+data_region_quantity['Percent'] = (data_region_quantity['Count'] / data_region_quantity['Count'].sum()) * 100
+data_region_quantity
+```
+
+
+```{python}
+uaCarsQuantity = uaRegionsGrid.merge(data_region_quantity, left_on='name', right_on='Region', how='left')
+
+uaCarsQuantity
+```
+
+```{python}
+uaCarsQuantity['Region'] = uaCarsQuantity['Region'].str.replace(' область', '')
+```
+
+```{python}
+#| fig-cap: "Відсоток автомобілів в регіонах України"
+data = np.asarray(uaCarsQuantity.pivot("row", "col", "Percent"))
+text = np.asarray(uaCarsQuantity.pivot("row", "col", "Region"))
+labels = (np.asarray(["{0}\n{1:.2f}".format(text,data) for text, data in zip(text.flatten(), data.flatten())])).reshape(5,8)
+
+sns.set_theme(style='white', font_scale=0.6)
+f, ax = plt.subplots(figsize=(9, 6))
+sns.heatmap(data,
+    annot=labels,
+    linewidths=.5,
+    fmt='',
+    ax=ax,
+    yticklabels=False,
+    xticklabels=False,
+    cbar=False)
 plt.show()
 ```
