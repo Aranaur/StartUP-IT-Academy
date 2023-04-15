@@ -7,7 +7,9 @@ import pandas as pd
 import numpy as np
 import datetime
 import matplotlib.pyplot as plt
+import ptitprince as pt
 import seaborn as sns
+import joypy
 import plotly.express as px
 from plotnine import *
 
@@ -39,7 +41,7 @@ warnings.filterwarnings("ignore")
 ```{python}
 #| column: screen-inset-shaded
 #| tbl-cap: 'Вхідні дані'
-df = pd.read_excel('00_data/ukr_cars.xlsx')
+df = pd.read_csv('00_data/ukr_cars.csv', skipinitialspace = True)
 df.head()
 ```
 
@@ -56,8 +58,17 @@ df.isna().sum()
 ```
 
 ```{python}
+# for col in df:
+#     print(col)
+#     print(df[col].unique())
+#     print('\n')
+```
+
+```{python}
 #| column: screen-inset-shaded
 df['Age'] = datetime.date.today().year - df['Year']
+df['Price_log'] = df['Price'].apply(lambda x: np.log(x))
+df['Region'] = df['Region'].str.replace(' область', '')
 df.head()
 ```
 
@@ -71,15 +82,8 @@ df['Brand'].value_counts().head()
 ```
 
 ```{python}
-#| fig-cap: 'Марки автомобілів, які зустрічаються найчастіше'
-# ax = sns.countplot(
-#     y='Brand',
-#     data=df,
-#     order=df.Brand.value_counts().iloc[:25].index
-#     )
-# ax.set_xlabel("Кількість")
-# ax.set_ylabel("")
-# plt.show()
+#| column: screen-inset-shaded
+#| layout-nrow: 1
 
 df_counts = df["Brand"].value_counts().iloc[:25].reset_index()
 df_counts.columns = ["Brand", "count"]
@@ -89,23 +93,12 @@ fig.update_layout(yaxis={'categoryorder':'total ascending'})
 
 fig.update_layout(xaxis_title="Кількість", yaxis_title="", plot_bgcolor='rgba(0,0,0,0)')
 fig.show()
-```
-
-```{python}
-#| fig-cap: 'Марки автомобілів, які зустрічаються найрідше'
-# ax = sns.countplot(
-#     y='Brand',
-#     data=df,
-#     order=df.Brand.value_counts().iloc[:-50:-1].index
-#     )
-# ax.set_xlabel("Кількість")
-# ax.set_ylabel("")
-# plt.show()
 
 df_counts = df["Brand"].value_counts().iloc[:-50:-1].reset_index()
 df_counts.columns = ["Brand", "count"]
 
 fig = px.bar(df_counts, y="Brand", x="count", orientation="h")
+fig.update_layout(yaxis={'categoryorder':'total descending'})
 
 fig.update_layout(xaxis_title="Кількість", yaxis_title="", plot_bgcolor='rgba(0,0,0,0)')
 fig.show()
@@ -156,37 +149,21 @@ mb.fig.suptitle("")
 plt.show()
 ```
 
-
 ```{python}
 uaRegionsGrid = pd.DataFrame({
 'row': [1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 5, 5],
 'col': [2, 5, 6, 7, 1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8, 2, 5, 6, 7, 4, 6, 5],
 'code': list(range(1, 28)),
-'name': ["Волинська область", "Київ", "Чернігівська область", "Сумська область", "Львівська область", "Тернопільська область", "Рівненська область", "Житомирська область", "Київська область", "Полтавська область", "Харківська область", "Луганська область", "Закарпатська область", "Івано-Франківська область", "Хмельницька область", "Вінницька область", "Черкаська область", "Кіровоградська область", "Дніпропетровська область", "Донецька область", "Чернівецька область", "Миколаївська область", "Херсонська область", "Запорізька область", "Одеська область", "АР Крим", "м. Севастополь"]
+'name': ["Волинська", "Київ", "Чернігівська", "Сумська", "Львівська", "Тернопільська", "Рівненська", "Житомирська", "Київська", "Полтавська", "Харківська", "Луганська", "Закарпатська", "Івано-Франківська", "Хмельницька", "Вінницька", "Черкаська", "Кіровоградська", "Дніпропетровська", "Донецька", "Чернівецька", "Миколаївська", "Херсонська", "Запорізька", "Одеська", "АР Крим", "м. Севастополь"]
 })
-uaRegionsGrid
-```
 
-
-```{python}
 data_region_quantity = df.groupby('Region').size().reset_index(name='Count')
 data_region_quantity['Percent'] = (data_region_quantity['Count'] / data_region_quantity['Count'].sum()) * 100
-data_region_quantity
-```
-
-
-```{python}
 uaCarsQuantity = uaRegionsGrid.merge(data_region_quantity, left_on='name', right_on='Region', how='left')
-
-uaCarsQuantity
 ```
 
 ```{python}
-uaCarsQuantity['Region'] = uaCarsQuantity['Region'].str.replace(' область', '')
-```
-
-```{python}
-#| fig-cap: "Відсоток автомобілів в регіонах України"
+#| fig-cap: "Відсоток представлених автомобілів в регіонах України"
 data = np.asarray(uaCarsQuantity.pivot("row", "col", "Percent"))
 text = np.asarray(uaCarsQuantity.pivot("row", "col", "Region"))
 labels = (np.asarray(["{0}\n{1:.2f}".format(text,data) for text, data in zip(text.flatten(), data.flatten())])).reshape(5,8)
@@ -202,4 +179,21 @@ sns.heatmap(data,
     xticklabels=False,
     cbar=False)
 plt.show()
+```
+
+```{python}
+dx = "GearboxType"; dy = "Price_log"; dhue = "GearboxType"; pal = "Set2"; sigma = 0.2; ort = "h"
+f, ax = plt.subplots(figsize=(9, 6))
+
+ax=pt.RainCloud(x = dx, y = dy, data = df, bw = sigma, width_viol = .7,
+                ax = ax, orient = ort , alpha = .65, linewidth=0.5, dodge = True, pointplot = True, move = .2)
+```
+
+
+```{python}
+labels=[y if y%5==0 else None for y in list(df.Age.unique())]
+fig, axes = joypy.joyplot(df, by="Age", column="Price_log", labels=labels, range_style='own', 
+                          grid="y", linewidth=1, legend=False, fade=True, figsize=(6,5),
+                          title="Вартість автомобілів по рокам\n(ln(Price))",
+                          kind="counts", bins=50)
 ```
