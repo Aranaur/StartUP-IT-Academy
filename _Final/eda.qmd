@@ -183,17 +183,19 @@ plt.show()
 
 ```{python}
 dx = "GearboxType"; dy = "Price_log"; dhue = "GearboxType"; pal = "Set2"; sigma = 0.2; ort = "h"
-f, ax = plt.subplots(figsize=(9, 6))
+f, ax = plt.subplots(figsize=(8, 6))
 
 ax=pt.RainCloud(x = dx, y = dy, data = df, bw = sigma, width_viol = .7,
-                ax = ax, orient = ort , alpha = .65, linewidth=0.5, dodge = True, pointplot = True, move = .2)
+                ax = ax, orient = ort , alpha = .65, linewidth=0.5, 
+                dodge = True, pointplot = True, move = .2)
 ```
 
 
 ```{python}
 labels=[y if y%5==0 else None for y in list(df.Age.unique())]
-fig, axes = joypy.joyplot(df, by="Age", column="Price_log", labels=labels, range_style='own', 
-                          grid="y", linewidth=1, legend=False, fade=True, figsize=(6,5),
-                          title="Вартість автомобілів по рокам\n(ln(Price))",
-                          kind="counts", bins=50)
+fig, axes = joypy.joyplot(df, by="Age", column="Price_log",
+                            labels=labels, range_style='own', 
+                            grid="y", linewidth=1, legend=False, fade=True, figsize=(9,6),
+                            title="Вартість автомобілів по рокам\n(ln(Price))",                            
+                            kind="counts", bins=50)
 ```
