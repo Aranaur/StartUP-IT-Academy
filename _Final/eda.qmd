@@ -6,11 +6,16 @@
 import pandas as pd
 import numpy as np
 import datetime
+import pyarrow.parquet as pq
+
+
 import matplotlib.pyplot as plt
 import ptitprince as pt
 import seaborn as sns
 import joypy
 import plotly.express as px
+import plotly.graph_objects as go
+from scipy.interpolate import griddata
 from plotnine import *
 
 import warnings
@@ -23,25 +28,26 @@ warnings.filterwarnings("ignore")
 
 Опис змінних:
 
-1. `Brand` – марка автомобіля;
-1. `Model` – модель автомобіля;
-1. `Year` – рік випуску автомобіля;
-1. `Price` – ціна автомобіля (дол.);
-1. `Mileage` – пробіг автомобіля (тис. км.);
-1. `Location` – фізичне місце розташування автомобіля (включає в себе міста, села, поселення міського типу);
-1. `Region` - регіон розташування автомобіля;
-1. `Fuel type` – тип палива автомобіля;
-1. `Engine volume` – об‘єм двигуна автомобіля (л.);
-1. `Gearbox type` – тип коробки передач автомобіля;
-1. `Wheel drive` – тип приводу автомобіля;
-1. `Accident` – ДТП (потрапляв автомобіль в ДТП чи ні);
-1. `VIN-code` – VIN-code (перевірений VIN-code чи ні);
-1. `Desc` – опис оголошення.
+1. `price` – ціна автомобіля (дол.);
+1. `full_name` – повна назва автомобіля (включає в себе марку та модель);
+1. `brand` – марка автомобіля;
+1. `model` – модель автомобіля;
+1. `make_year` – рік випуску автомобіля;
+1. `mileage` – пробіг автомобіля (тис. км.);
+1. `location` – фізичне місце розташування автомобіля (включає в себе міста, села, поселення міського типу);
+1. `region` - регіон розташування автомобіля;
+1. `fuel` – тип палива автомобіля;
+1. `disp` – об‘єм двигуна автомобіля (л.);
+1. `gearbox` – тип коробки передач автомобіля;
+1. `drive` – тип приводу автомобіля;
+1. `accident` – ДТП (потрапляв автомобіль в ДТП чи ні);
+1. `vin` – VIN-code (перевірений VIN-code чи ні);
+1. `desc` – опис оголошення.
 
 ```{python}
 #| column: screen-inset-shaded
 #| tbl-cap: 'Вхідні дані'
-df = pd.read_csv('00_data/ukr_cars.csv', skipinitialspace = True)
+df = pd.read_csv('00_data/cars.csv')
 df.head()
 ```
 
@@ -58,46 +64,33 @@ df.isna().sum()
 ```
 
 ```{python}
-# for col in df:
-#     print(col)
-#     print(df[col].unique())
-#     print('\n')
+df.fuel.value_counts()
+```
+```{python}
+df["brand"].nunique()
 ```
 
 ```{python}
-#| column: screen-inset-shaded
-df['Age'] = datetime.date.today().year - df['Year']
-df['Price_log'] = df['Price'].apply(lambda x: np.log(x))
-df['Region'] = df['Region'].str.replace(' область', '')
-df.head()
-```
-
-```{python}
-df["Brand"].nunique()
-```
-
-
-```{python}
-df['Brand'].value_counts().head()
+df['brand'].value_counts().head()
 ```
 
 ```{python}
 #| column: screen-inset-shaded
 #| layout-nrow: 1
 
-df_counts = df["Brand"].value_counts().iloc[:25].reset_index()
-df_counts.columns = ["Brand", "count"]
+df_counts = df["brand"].value_counts().iloc[:25].reset_index()
+df_counts.columns = ["brand", "count"]
 
-fig = px.bar(df_counts, y="Brand", x="count", orientation="h")
+fig = px.bar(df_counts, y="brand", x="count", orientation="h")
 fig.update_layout(yaxis={'categoryorder':'total ascending'})
 
 fig.update_layout(xaxis_title="Кількість", yaxis_title="", plot_bgcolor='rgba(0,0,0,0)')
 fig.show()
 
-df_counts = df["Brand"].value_counts().iloc[:-50:-1].reset_index()
-df_counts.columns = ["Brand", "count"]
+df_counts = df["brand"].value_counts().iloc[:-50:-1].reset_index()
+df_counts.columns = ["brand", "count"]
 
-fig = px.bar(df_counts, y="Brand", x="count", orientation="h")
+fig = px.bar(df_counts, y="brand", x="count", orientation="h")
 fig.update_layout(yaxis={'categoryorder':'total descending'})
 
 fig.update_layout(xaxis_title="Кількість", yaxis_title="", plot_bgcolor='rgba(0,0,0,0)')
@@ -107,21 +100,21 @@ fig.show()
 ```{python}
 def get_top_models(df, brand, top_n=5):
     # Відфільтровуємо за брендом
-    df_brand = df[df["Brand"] == brand]
+    df_brand = df[df["brand"] == brand]
     
     # Згрупуємо за моделлю та порахуємо кількість
-    model_counts = df_brand.groupby(by=["Model"]).size().reset_index(name="Count")
+    model_counts = df_brand.groupby(by=["model"]).size().reset_index(name="count")
 
     # Відсортуємо та обмежимо результат до top_n найпопулярніших моделей
-    top_models = model_counts.nlargest(top_n, "Count")
+    top_models = model_counts.nlargest(top_n, "count")
     
     return top_models
 ```
 
 ```{python}
-top5_vw_models = get_top_models(df, "Volkswagen")
+top5_vw_models = get_top_models(df, "VOLKSWAGEN")
 top5_bmw_models = get_top_models(df, "BMW")
-top5_mers_models = get_top_models(df, "Mercedes-Benz")
+top5_mers_models = get_top_models(df, "MERCEDES-BENZ")
 ```
 
 
@@ -132,17 +125,17 @@ top5_mers_models = get_top_models(df, "Mercedes-Benz")
 #|   - "BMW"
 #|   - "Mercedes-Benz"
 #| column: page
-volk = sns.catplot(y='Model', x='Count', data=top5_vw_models, kind='bar',
+volk = sns.catplot(y='model', x='count', data=top5_vw_models, kind='bar',
 palette='PRGn', alpha=0.5, legend=False)
 volk.set(xlabel='Кількість', ylabel='Модель автомобіля', title='Volkswagen')
 volk.fig.suptitle("")
 
-bmw = sns.catplot(y='Model', x='Count', data=top5_bmw_models, kind='bar',
+bmw = sns.catplot(y='model', x='count', data=top5_bmw_models, kind='bar',
 palette='Spectral', alpha=0.5, legend=False)
 bmw.set(xlabel='Кількість', ylabel='Модель автомобіля', title='BMW')
 bmw.fig.suptitle("")
 
-mb = sns.catplot(y='Model', x='Count', data=top5_mers_models, kind='bar',
+mb = sns.catplot(y='model', x='count', data=top5_mers_models, kind='bar',
 palette='BrBG', alpha=0.5, legend=False)
 mb.set(xlabel='Кількість', ylabel='Модель автомобіля', title='Mercedes-Benz')
 mb.fig.suptitle("")
@@ -154,18 +147,18 @@ uaRegionsGrid = pd.DataFrame({
 'row': [1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 5, 5],
 'col': [2, 5, 6, 7, 1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8, 2, 5, 6, 7, 4, 6, 5],
 'code': list(range(1, 28)),
-'name': ["Волинська", "Київ", "Чернігівська", "Сумська", "Львівська", "Тернопільська", "Рівненська", "Житомирська", "Київська", "Полтавська", "Харківська", "Луганська", "Закарпатська", "Івано-Франківська", "Хмельницька", "Вінницька", "Черкаська", "Кіровоградська", "Дніпропетровська", "Донецька", "Чернівецька", "Миколаївська", "Херсонська", "Запорізька", "Одеська", "АР Крим", "м. Севастополь"]
+'name': ["ВОЛИНСЬКА", "КИЇВ", "ЧЕРНІГІВСЬКА", "СУМСЬКА", "ЛЬВІВСЬКА", "ТЕРНОПІЛЬСЬКА", "РІВНЕНСЬКА", "ЖИТОМИРСЬКА", "КИЇВСЬКА", "ПОЛТАВСЬКА", "ХАРКІВСЬКА", "ЛУГАНСЬКА", "ЗАКАРПАТСЬКА", "ІВАНО-ФРАНКІВСЬКА", "ХМЕЛЬНИЦЬКА", "ВІННИЦЬКА", "ЧЕРКАСЬКА", "КІРОВОГРАДСЬКА", "ДНІПРОПЕТРОВСЬКА", "ДОНЕЦЬКА", "ЧЕРНІВЕЦЬКА", "МИКОЛАЇВСЬКА", "ХЕРСОНСЬКА", "ЗАПОРІЗЬКА", "ОДЕСЬКА", "АР КРИМ", "СЕВАСТОПОЛЬ"]
 })
 
-data_region_quantity = df.groupby('Region').size().reset_index(name='Count')
-data_region_quantity['Percent'] = (data_region_quantity['Count'] / data_region_quantity['Count'].sum()) * 100
-uaCarsQuantity = uaRegionsGrid.merge(data_region_quantity, left_on='name', right_on='Region', how='left')
+data_region_quantity = df.groupby('region').size().reset_index(name='count')
+data_region_quantity['percent'] = (data_region_quantity['count'] / data_region_quantity['count'].sum()) * 100
+uaCarsQuantity = uaRegionsGrid.merge(data_region_quantity, left_on='name', right_on='region', how='left')
 ```
 
 ```{python}
 #| fig-cap: "Відсоток представлених автомобілів в регіонах України"
-data = np.asarray(uaCarsQuantity.pivot("row", "col", "Percent"))
-text = np.asarray(uaCarsQuantity.pivot("row", "col", "Region"))
+data = np.asarray(uaCarsQuantity.pivot("row", "col", "percent"))
+text = np.asarray(uaCarsQuantity.pivot("row", "col", "region"))
 labels = (np.asarray(["{0}\n{1:.2f}".format(text,data) for text, data in zip(text.flatten(), data.flatten())])).reshape(5,8)
 
 sns.set_theme(style='white', font_scale=0.6)
@@ -182,20 +175,163 @@ plt.show()
 ```
 
 ```{python}
-dx = "GearboxType"; dy = "Price_log"; dhue = "GearboxType"; pal = "Set2"; sigma = 0.2; ort = "h"
 f, ax = plt.subplots(figsize=(8, 6))
+ax=pt.RainCloud(x = df.gearbox, y = df.price_log, data = df, bw =  0.2, width_viol = 0.9,
+                ax = ax, orient = "h" , linewidth=0.1,
+                cut = 0,   
+                alpha = .65, dodge = True,
+                pointplot = True, move = .2)
+ax.set_ylabel('')
+```
 
-ax=pt.RainCloud(x = dx, y = dy, data = df, bw = sigma, width_viol = .7,
-                ax = ax, orient = ort , alpha = .65, linewidth=0.5, 
-                dodge = True, pointplot = True, move = .2)
+```{python}
+f, ax = plt.subplots(figsize=(8, 6))
+ax=pt.RainCloud(x = df.gearbox, y = np.log1p(df.mileage),
+                bw = 0.2, width_viol = 0.9,
+                ax = ax, orient = "h" , linewidth=0.1,
+                alpha = .65, dodge = True,
+                pointplot = True, move = .2)
+ax.set_ylabel('')
+plt.show()
+```
+
+```{python}
+#| layout-ncol: 2
+#| column: page
+labels=[y if y%5==0 else None for y in list(df.age.unique())]
+fig, axes = joypy.joyplot(df, by="age", column="price_log",
+                            labels=labels, range_style='own', 
+                            grid="y", linewidth=1, legend=False, fade=True,
+                            title="Вартість автомобілів по рокам\n(log(Price))",                            
+                            kind="counts", bins=50)
+
+labels=[y if y%5==0 else None for y in list(df.age.unique())]
+fig, axes = joypy.joyplot(df, by="age", column='mileage',
+                            labels=labels, range_style='own', 
+                            grid="y", linewidth=1, legend=False, fade=True,
+                            title="Пробіг автомобілів по рокам\n(log(Price))",                            
+                            kind="counts")
+
+plt.show()
 ```
 
 
 ```{python}
-labels=[y if y%5==0 else None for y in list(df.Age.unique())]
-fig, axes = joypy.joyplot(df, by="Age", column="Price_log",
-                            labels=labels, range_style='own', 
-                            grid="y", linewidth=1, legend=False, fade=True, figsize=(9,6),
-                            title="Вартість автомобілів по рокам\n(ln(Price))",                            
-                            kind="counts", bins=50)
+sns.scatterplot(x="make_year", y="price_log",
+                hue="gearbox", data=df,
+                size='mileage', alpha=0.5)
+plt.show()
+```
+
+```{python}
+sns.histplot(data=df, x="price_log", hue="accident",
+                palette="mako", kde=True, alpha=0.5)
+plt.show()
+```
+
+```{python}
+
+x = np.array(df.make_year)
+y = np.array(df.mileage)
+z = np.array(np.log(df.price))
+
+
+xi = np.linspace(x.min(), x.max(), 100)
+yi = np.linspace(y.min(), y.max(), 100)
+
+X,Y = np.meshgrid(xi,yi)
+
+Z = griddata((x,y),z,(X,Y), method='cubic')
+
+fig = go.Figure(go.Surface(x=xi,y=yi,z=Z))
+fig.update_layout(scene=dict(
+                    xaxis_title='Рік виробництва',
+                    yaxis_title='Пробіг',
+                    zaxis_title='Ціна',
+    ))
+fig.show()
+```
+
+
+```{python}
+corr_matrix = df.corr()
+
+mask = np.zeros_like(corr_matrix, dtype=np.bool)
+mask[np.triu_indices_from(mask)]= True
+
+f, ax = plt.subplots(figsize=(8, 6))
+
+heatmap = sns.heatmap(corr_matrix,
+                      mask = mask,
+                      square = True,
+                      linewidths = .5,
+                      cmap = 'coolwarm',
+                      cbar_kws = {'shrink': .4,
+                                  'ticks' : [-1, -.5, 0, 0.5, 1]},
+                      vmin = -1,
+                      vmax = 1,
+                      annot = True,
+                      annot_kws = {'size': 12})
+
+ax.set_yticklabels(corr_matrix.columns, rotation = 0)
+ax.set_xticklabels(corr_matrix.columns)
+
+sns.set_style({'xtick.bottom': True}, {'ytick.left': True})
+```
+
+## Дані з data.gov.ua
+
+```{python}
+#| column: screen-inset-shaded
+#| tbl-cap: 'Вхідні дані'
+df_gov = pd.read_csv('00_data/cars_region_brand.csv')
+df_gov.head()
+```
+
+```{python}
+def reduce_mem_usage(df):
+    start_mem = df.memory_usage().sum() / 1024**2
+    print('Memory usage of dataframe is {:.2f} MB'.format(start_mem))
+    for col in df.columns:
+        col_type = df[col].dtype
+        
+        if col_type != object:
+            c_min = df[col].min()
+            c_max = df[col].max()
+            if str(col_type)[:3] == 'int':
+                if c_min > np.iinfo(np.int8).min and c_max < np.iinfo(np.int8).max:
+                    df[col] = df[col].astype(np.int8)
+                elif c_min > np.iinfo(np.int16).min and c_max < np.iinfo(np.int16).max:
+                    df[col] = df[col].astype(np.int16)
+                elif c_min > np.iinfo(np.int32).min and c_max < np.iinfo(np.int32).max:
+                    df[col] = df[col].astype(np.int32)
+                elif c_min > np.iinfo(np.int64).min and c_max < np.iinfo(np.int64).max:
+                    df[col] = df[col].astype(np.int64)  
+            else:
+                if c_min > np.finfo(np.float16).min and c_max < np.finfo(np.float16).max:
+                    df[col] = df[col].astype(np.float16)
+                elif c_min > np.finfo(np.float32).min and c_max < np.finfo(np.float32).max:
+                    df[col] = df[col].astype(np.float32)
+                else:
+                    df[col] = df[col].astype(np.float64)
+        else:
+            df[col] = df[col].astype('category')
+
+    end_mem = df.memory_usage().sum() / 1024**2
+    print('Memory usage after optimization is: {:.2f} MB'.format(end_mem))
+    print('Decreased by {:.1f}%'.format(100 * (start_mem - end_mem) / start_mem))
+    
+    return df
+```
+
+```{python}
+df = reduce_mem_usage(df)
+df_gov = reduce_mem_usage(df_gov)
+```
+
+```{python}
+#| column: screen-inset-shaded
+#| tbl-cap: 'Вхідні дані'
+df_merge = pd.merge(df, df_gov,  how='left', on=['brand', 'model', 'make_year', 'fuel'])
+df_merge
 ```
