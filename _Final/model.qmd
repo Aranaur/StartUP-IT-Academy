@@ -182,7 +182,7 @@ df_feature_importance = (
 df_feature_importance
 ```
 
-## Висновки та про позиції
+## Висновки та пропозиції
 ### Загальний підсумок ефективності моделей:
 ```{python}
 mae_score = {'Модель': ['CatBoost', 'XGBoost', 'LightGBM'],

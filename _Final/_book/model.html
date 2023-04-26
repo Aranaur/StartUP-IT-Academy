@@ -217,7 +217,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <li><a href="#оцінка-моделі-2" id="toc-оцінка-моделі-2" class="nav-link" data-scroll-target="#оцінка-моделі-2"><span class="toc-section-number">2.3.5</span>  Оцінка моделі</a></li>
   <li><a href="#важливість-ознак" id="toc-важливість-ознак" class="nav-link" data-scroll-target="#важливість-ознак"><span class="toc-section-number">2.3.6</span>  Важливість ознак</a></li>
   </ul></li>
-  <li><a href="#висновки-та-про-позиції" id="toc-висновки-та-про-позиції" class="nav-link" data-scroll-target="#висновки-та-про-позиції"><span class="toc-section-number">2.4</span>  Висновки та про позиції</a>
+  <li><a href="#висновки-та-пропозиції" id="toc-висновки-та-пропозиції" class="nav-link" data-scroll-target="#висновки-та-пропозиції"><span class="toc-section-number">2.4</span>  Висновки та пропозиції</a>
   <ul class="collapse">
   <li><a href="#загальний-підсумок-ефективності-моделей" id="toc-загальний-підсумок-ефективності-моделей" class="nav-link" data-scroll-target="#загальний-підсумок-ефективності-моделей"><span class="toc-section-number">2.4.1</span>  Загальний підсумок ефективності моделей:</a></li>
   <li><a href="#пропозиції-щодо-подальшого-дослідження-та-підвищення-ефективності" id="toc-пропозиції-щодо-подальшого-дослідження-та-підвищення-ефективності" class="nav-link" data-scroll-target="#пропозиції-щодо-подальшого-дослідження-та-підвищення-ефективності"><span class="toc-section-number">2.4.2</span>  Пропозиції щодо подальшого дослідження та підвищення ефективності:</a></li>
@@ -249,7 +249,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2 data-number="2.1" class="anchored" data-anchor-id="catboost"><span class="header-section-number">2.1</span> Catboost</h2>
 <section id="імпорт-бібліотек" class="level3" data-number="2.1.1">
 <h3 data-number="2.1.1" class="anchored" data-anchor-id="імпорт-бібліотек"><span class="header-section-number">2.1.1</span> Імпорт бібліотек</h3>
-<div class="cell" data-execution_count="1">
+<div class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
@@ -266,7 +266,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </section>
 <section id="завантаження-даних" class="level3 page-columns page-full" data-number="2.1.2">
 <h3 data-number="2.1.2" class="anchored" data-anchor-id="завантаження-даних"><span class="header-section-number">2.1.2</span> Завантаження даних</h3>
-<div class="cell page-columns page-full" data-execution_count="2">
+<div class="cell page-columns page-full" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>train <span class="op">=</span> pd.read_csv(<span class="st">'00_data_clean/train.csv'</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>train.sample(<span class="dv">3</span>)</span></code><button title="Копіювати" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -299,71 +299,71 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   </thead>
   <tbody>
     <tr>
-      <th>24525</th>
-      <td>19000</td>
-      <td>AUDI A6  2014</td>
-      <td>AUDI</td>
-      <td>A6</td>
-      <td>2014</td>
-      <td>190</td>
-      <td>ОДЕСА</td>
-      <td>ОДЕСЬКА</td>
-      <td>БЕНЗИН</td>
-      <td>2.8</td>
-      <td>АКПП</td>
-      <td>ПОВНИЙ</td>
-      <td>НІ</td>
-      <td>ТАК</td>
-      <td>АВТО У ВІДМІННОМУ СТАНІ!!!\nМОЖЛИВИЙ ОБМІН НА ...</td>
-      <td>8</td>
-      <td>9.852194</td>
-    </tr>
-    <tr>
-      <th>12906</th>
-      <td>7900</td>
-      <td>DACIA DUSTER  2010</td>
-      <td>DACIA</td>
-      <td>DUSTER</td>
-      <td>2010</td>
-      <td>180</td>
-      <td>ВІННИЦЯ</td>
-      <td>ВІННИЦЬКА</td>
-      <td>ДИЗЕЛЬ</td>
-      <td>1.5</td>
-      <td>МКПП</td>
-      <td>ПОВНИЙ</td>
-      <td>НІ</td>
-      <td>ТАК</td>
-      <td>КРОССОВЕР,ДАЧА ДАСТЕР 2011ГОД,1.5ДИЗЕЛЬ,ПОВНИЙ...</td>
-      <td>12</td>
-      <td>8.974618</td>
-    </tr>
-    <tr>
-      <th>19497</th>
-      <td>9600</td>
-      <td>FORD FOCUS  2016</td>
-      <td>FORD</td>
-      <td>FOCUS</td>
-      <td>2016</td>
-      <td>72</td>
-      <td>ВІННИЦЯ</td>
-      <td>ВІННИЦЬКА</td>
+      <th>32897</th>
+      <td>53999</td>
+      <td>LAND ROVER RANGE ROVER VELAR  2019</td>
+      <td>LAND ROVER</td>
+      <td>ROVER RANGE ROVER VELAR</td>
+      <td>2019</td>
+      <td>71</td>
+      <td>ДНІПРО</td>
+      <td>ДНІПРОПЕТРОВСЬКА</td>
       <td>БЕНЗИН</td>
       <td>2.0</td>
       <td>АКПП</td>
+      <td>ПОВНИЙ</td>
+      <td>НІ</td>
+      <td>ТАК</td>
+      <td>ОФІЦІЙНИЙ АВТОМОБІЛЬ У ВІДМІННОМУ СТАНІ, СТАН ...</td>
+      <td>3</td>
+      <td>10.896721</td>
+    </tr>
+    <tr>
+      <th>31918</th>
+      <td>6300</td>
+      <td>PEUGEOT 308 SW  2009</td>
+      <td>PEUGEOT</td>
+      <td>308 SW</td>
+      <td>2009</td>
+      <td>235</td>
+      <td>РАДИВИЛІВ</td>
+      <td>РІВНЕНСЬКА</td>
+      <td>ДИЗЕЛЬ</td>
+      <td>1.6</td>
+      <td>МКПП</td>
+      <td>ПЕРЕДНІЙ</td>
+      <td>НІ</td>
+      <td>ТАК</td>
+      <td>ПРИГНАНИЙ З НІДЕРЛАНДІВ. ОРИГІНАЛЬНИЙ ПРОБІГ, ...</td>
+      <td>13</td>
+      <td>8.748305</td>
+    </tr>
+    <tr>
+      <th>15399</th>
+      <td>18700</td>
+      <td>HYUNDAI TUCSON NIGHT EDITION 2017</td>
+      <td>HYUNDAI</td>
+      <td>TUCSON NIGHT EDITION</td>
+      <td>2017</td>
+      <td>46</td>
+      <td>ЖИТОМИР</td>
+      <td>ЖИТОМИРСЬКА</td>
+      <td>БЕНЗИН</td>
+      <td>1.6</td>
+      <td>РКПП</td>
       <td>ПЕРЕДНІЙ</td>
       <td>ТАК</td>
       <td>ТАК</td>
-      <td>АВТО В ГАРНОМУ СТАНІ, БЕЗ ЄДИНОГО ПІДКРАСУ, БЕ...</td>
-      <td>6</td>
-      <td>9.169518</td>
+      <td>НОВЕ АВТО!!! ПАНОРАМНИЙ ДАХ!!!МАШИНА СВОЯ, ПРО...</td>
+      <td>5</td>
+      <td>9.836279</td>
     </tr>
   </tbody>
 </table>
 </div>
 </div>
 </div>
-<div class="cell page-columns page-full" data-execution_count="3">
+<div class="cell page-columns page-full" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>test <span class="op">=</span> pd.read_csv(<span class="st">'00_data_clean/test.csv'</span>)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>test.sample(<span class="dv">3</span>)</span></code><button title="Копіювати" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -396,64 +396,64 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   </thead>
   <tbody>
     <tr>
-      <th>7669</th>
-      <td>17500</td>
-      <td>NISSAN ROGUE  2017</td>
-      <td>NISSAN</td>
-      <td>ROGUE</td>
-      <td>2017</td>
-      <td>65</td>
-      <td>КРИВИЙ РІГ</td>
-      <td>ДНІПРОПЕТРОВСЬКА</td>
-      <td>БЕНЗИН</td>
-      <td>2.5</td>
-      <td>ВКПП</td>
-      <td>ПОВНИЙ</td>
+      <th>368</th>
+      <td>10000</td>
+      <td>TOYOTA CAMRY  2013</td>
+      <td>TOYOTA</td>
+      <td>CAMRY</td>
+      <td>2013</td>
+      <td>140</td>
+      <td>КИЇВ</td>
+      <td>КИЇВ</td>
+      <td>ГАЗ</td>
+      <td>0.0</td>
+      <td>АКПП</td>
+      <td>ПЕРЕДНІЙ</td>
       <td>ТАК</td>
       <td>ТАК</td>
-      <td>NISSAN ROGUE 2,5L. 10 МІСЯЦЬ 2017РОКУ. 64000КМ...</td>
-      <td>5</td>
-      <td>9.769956</td>
+      <td>ПРОДАМ СВОЮ КАМРІ 50 АМЕРИКАНЕЦЬ, УДАР БУВ У З...</td>
+      <td>9</td>
+      <td>9.210340</td>
     </tr>
     <tr>
-      <th>2399</th>
-      <td>13900</td>
-      <td>BMW X5 XDRIVE35 2010</td>
-      <td>BMW</td>
-      <td>X5 XDRIVE35</td>
-      <td>2010</td>
-      <td>210</td>
-      <td>ЛЬВІВ</td>
-      <td>ЛЬВІВСЬКА</td>
-      <td>БЕНЗИН</td>
-      <td>3.0</td>
+      <th>3094</th>
+      <td>32593</td>
+      <td>PEUGEOT 3008 2.0 HDI AT (150 К.С.) 2022</td>
+      <td>PEUGEOT</td>
+      <td>3008 2.0 HDI AT (150 К.С.)</td>
+      <td>2022</td>
+      <td>0</td>
+      <td>ЗАПОРІЖЖЯ</td>
+      <td>ЗАПОРІЗЬКА</td>
+      <td>ДИЗЕЛЬ</td>
+      <td>2.0</td>
       <td>АКПП</td>
-      <td>ПОВНИЙ</td>
-      <td>ТАК</td>
-      <td>ТАК</td>
-      <td>ПОВНІСТЮ ОБСЛУЖЕНИЙ АВТОМОБІЛЬ. ЧУДОВА ШУМОІЗО...</td>
-      <td>12</td>
-      <td>9.539644</td>
-    </tr>
-    <tr>
-      <th>3694</th>
-      <td>4000</td>
-      <td>ZX LANDMARK  2007</td>
-      <td>ZX</td>
-      <td>LANDMARK</td>
-      <td>2007</td>
-      <td>150</td>
-      <td>РУЖИН</td>
-      <td>ЖИТОМИРСЬКА</td>
-      <td>БЕНЗИН</td>
-      <td>2.4</td>
-      <td>АКПП</td>
-      <td>ЗАДНІЙ</td>
+      <td>ПЕРЕДНІЙ</td>
       <td>НІ</td>
       <td>ТАК</td>
-      <td>ДВИГУН 2.4 ГАЗ/БЕНЗИН\nДЕТАЛІ ЗА ТЕЛЕФОНОМ</td>
-      <td>15</td>
-      <td>8.294050</td>
+      <td>PEUGEOT 3008 ALLURE PACK HDI 150 АКПП-8 2022Р....</td>
+      <td>0</td>
+      <td>10.391853</td>
+    </tr>
+    <tr>
+      <th>2273</th>
+      <td>19700</td>
+      <td>NISSAN QASHQAI  2019</td>
+      <td>NISSAN</td>
+      <td>QASHQAI</td>
+      <td>2019</td>
+      <td>17</td>
+      <td>ДНІПРО</td>
+      <td>ДНІПРОПЕТРОВСЬКА</td>
+      <td>БЕНЗИН</td>
+      <td>1.2</td>
+      <td>АКПП</td>
+      <td>ПЕРЕДНІЙ</td>
+      <td>НІ</td>
+      <td>ТАК</td>
+      <td>ОФІЦІЙНИЙ АВТОМОБІЛЬ. КУПУВАВСЯ НОВИМ В АВТОСА...</td>
+      <td>3</td>
+      <td>9.888374</td>
     </tr>
   </tbody>
 </table>
@@ -463,7 +463,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </section>
 <section id="класифікуємо-ознаки-на-типи" class="level3" data-number="2.1.3">
 <h3 data-number="2.1.3" class="anchored" data-anchor-id="класифікуємо-ознаки-на-типи"><span class="header-section-number">2.1.3</span> Класифікуємо ознаки на типи</h3>
-<div class="cell" data-execution_count="4">
+<div class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>features2drop <span class="op">=</span> [<span class="st">'full_name'</span>, <span class="st">'desc'</span>, <span class="st">'price_log'</span>]</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>targets <span class="op">=</span> [<span class="st">'price'</span>]</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>cat_features <span class="op">=</span> [<span class="st">'brand'</span>, <span class="st">'model'</span>, <span class="st">'location'</span>, <span class="st">'region'</span>, <span class="st">'fuel'</span>, <span class="st">'gearbox'</span>, <span class="st">'drive'</span>, <span class="st">'accident'</span>, <span class="st">'vin'</span>]</span>
@@ -483,14 +483,14 @@ targets ['price']</code></pre>
 </section>
 <section id="навчаємо-catboost-та-робимо-прогноз-на-тестових-даних" class="level3" data-number="2.1.4">
 <h3 data-number="2.1.4" class="anchored" data-anchor-id="навчаємо-catboost-та-робимо-прогноз-на-тестових-даних"><span class="header-section-number">2.1.4</span> Навчаємо Catboost та робимо прогноз на тестових даних</h3>
-<div class="cell" data-execution_count="5">
+<div class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> train[filtered_features].drop(targets, axis<span class="op">=</span><span class="dv">1</span>, errors<span class="op">=</span><span class="st">'ignore'</span>)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> train[<span class="st">'price'</span>]</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>X_train, X_test, y_train, y_test <span class="op">=</span> train_test_split(X, y, test_size<span class="op">=</span><span class="fl">0.2</span>, </span>
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>                                                    random_state<span class="op">=</span><span class="dv">2023</span>)</span></code><button title="Копіювати" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-execution_count="6">
+<div class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>cat_r <span class="op">=</span> CatBoostRegressor(cat_features<span class="op">=</span>cat_features, task_type<span class="op">=</span><span class="st">"GPU"</span>,</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>                        random_seed<span class="op">=</span><span class="dv">2023</span>)</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -501,52 +501,52 @@ targets ['price']</code></pre>
 <pre><code>Learning rate set to 0.088743</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code>0:  learn: 20951.9704763    test: 19718.6792064 best: 19718.6792064 (0) total: 29.9ms   remaining: 29.8s</code></pre>
+<pre><code>0:  learn: 20951.9704763    test: 19718.6792064 best: 19718.6792064 (0) total: 29.7ms   remaining: 29.6s</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code>150:    learn: 9379.7517897 test: 8840.9942779  best: 8840.9564688 (149)    total: 4.47s    remaining: 25.1s</code></pre>
+<pre><code>150:    learn: 9379.7517897 test: 8840.9942779  best: 8840.9564688 (149)    total: 4.5s remaining: 25.3s</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code>300:    learn: 8094.2834478 test: 8255.1300076  best: 8254.6193228 (298)    total: 9.03s    remaining: 21s</code></pre>
+<pre><code>300:    learn: 8056.1562819 test: 8271.2680389  best: 8260.2196897 (295)    total: 9.17s    remaining: 21.3s</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code>450:    learn: 7669.3236422 test: 8081.4861750  best: 8072.8058365 (439)    total: 13.4s    remaining: 16.3s</code></pre>
+<pre><code>450:    learn: 7996.4115785 test: 8302.8258609  best: 8260.2196897 (295)    total: 14.6s    remaining: 17.8s</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code>600:    learn: 7327.3882599 test: 8248.4349936  best: 8069.2327397 (481)    total: 17.8s    remaining: 11.8s</code></pre>
+<pre><code>600:    learn: 7441.8893664 test: 8304.5194915  best: 8260.2196897 (295)    total: 20.3s    remaining: 13.5s</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code>750:    learn: 7175.3994426 test: 8295.9061310  best: 8069.2327397 (481)    total: 22.1s    remaining: 7.33s</code></pre>
+<pre><code>750:    learn: 7239.3916326 test: 8571.2966196  best: 8260.2196897 (295)    total: 25s  remaining: 8.28s</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code>900:    learn: 7122.2872383 test: 8307.2656941  best: 8069.2327397 (481)    total: 26.3s    remaining: 2.89s</code></pre>
+<pre><code>900:    learn: 7163.2073810 test: 8776.9576295  best: 8260.2196897 (295)    total: 29.7s    remaining: 3.26s</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code>999:    learn: 7058.4943538 test: 8320.7403435  best: 8069.2327397 (481)    total: 29.3s    remaining: 0us
-bestTest = 8069.23274
-bestIteration = 481
-Shrink model to first 482 iterations.</code></pre>
+<pre><code>999:    learn: 7120.5582156 test: 8824.8985590  best: 8260.2196897 (295)    total: 32.7s    remaining: 0us
+bestTest = 8260.21969
+bestIteration = 295
+Shrink model to first 296 iterations.</code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="6">
-<pre><code>&lt;catboost.core.CatBoostRegressor at 0x24e83755720&gt;</code></pre>
+<pre><code>&lt;catboost.core.CatBoostRegressor at 0x1fb45b46830&gt;</code></pre>
 </div>
 </div>
 </section>
 <section id="оцінка-моделі" class="level3" data-number="2.1.5">
 <h3 data-number="2.1.5" class="anchored" data-anchor-id="оцінка-моделі"><span class="header-section-number">2.1.5</span> Оцінка моделі</h3>
-<div class="cell" data-execution_count="7">
+<div class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>y_pred <span class="op">=</span> cat_r.predict(X_test)</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>mae_catboost <span class="op">=</span> mean_absolute_error(y_test, y_pred)</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f'</span><span class="ch">\n</span><span class="ss"> MAE: </span><span class="sc">{</span>mae_catboost<span class="sc">}</span><span class="ss">'</span>)</span></code><button title="Копіювати" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
- MAE: 3336.6720519245546</code></pre>
+ MAE: 3433.541171499897</code></pre>
 </div>
 </div>
 </section>
 <section id="оцінка-важливості-ознак" class="level3" data-number="2.1.6">
 <h3 data-number="2.1.6" class="anchored" data-anchor-id="оцінка-важливості-ознак"><span class="header-section-number">2.1.6</span> Оцінка важливості ознак</h3>
-<div class="cell" data-execution_count="8">
+<div class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>cat_r.get_feature_importance(prettified<span class="op">=</span><span class="va">True</span>, <span class="bu">type</span><span class="op">=</span><span class="st">'FeatureImportance'</span>)</span></code><button title="Копіювати" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="8">
 
@@ -564,67 +564,67 @@ Shrink model to first 482 iterations.</code></pre>
     <tr>
       <th>0</th>
       <td>disp</td>
-      <td>29.999421</td>
+      <td>30.153334</td>
     </tr>
     <tr>
       <th>1</th>
       <td>make_year</td>
-      <td>17.982811</td>
+      <td>18.598479</td>
     </tr>
     <tr>
       <th>2</th>
       <td>brand</td>
-      <td>16.670394</td>
+      <td>16.362023</td>
     </tr>
     <tr>
       <th>3</th>
       <td>mileage</td>
-      <td>10.825920</td>
+      <td>10.669335</td>
     </tr>
     <tr>
       <th>4</th>
       <td>age</td>
-      <td>8.371129</td>
+      <td>8.587506</td>
     </tr>
     <tr>
       <th>5</th>
       <td>drive</td>
-      <td>5.645212</td>
+      <td>5.689647</td>
     </tr>
     <tr>
       <th>6</th>
       <td>accident</td>
-      <td>4.795209</td>
+      <td>4.865896</td>
     </tr>
     <tr>
       <th>7</th>
-      <td>gearbox</td>
-      <td>1.790035</td>
+      <td>fuel</td>
+      <td>1.706947</td>
     </tr>
     <tr>
       <th>8</th>
-      <td>fuel</td>
-      <td>1.741838</td>
+      <td>gearbox</td>
+      <td>1.641930</td>
     </tr>
     <tr>
       <th>9</th>
-      <td>region</td>
-      <td>0.935300</td>
+      <td>location</td>
+      <td>0.749480</td>
     </tr>
     <tr>
       <th>10</th>
-      <td>location</td>
-      <td>0.915096</td>
+      <td>region</td>
+      <td>0.724571</td>
     </tr>
     <tr>
       <th>11</th>
       <td>model</td>
-      <td>0.308411</td>
+      <td>0.236796</td>
     </tr>
     <tr>
       <th>12</th>
       <td>vin</td>
-      <td>0.019225</td>
+      <td>0.014056</td>
     </tr>
   </tbody>
 </table>
@@ -637,7 +637,7 @@ Shrink model to first 482 iterations.</code></pre>
 <h2 data-number="2.2" class="anchored" data-anchor-id="xgboost"><span class="header-section-number">2.2</span> XGBoost</h2>
 <section id="імпорт-бібліотек-1" class="level3" data-number="2.2.1">
 <h3 data-number="2.2.1" class="anchored" data-anchor-id="імпорт-бібліотек-1"><span class="header-section-number">2.2.1</span> Імпорт бібліотек</h3>
-<div class="cell" data-execution_count="9">
+<div class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> xgboost <span class="im">as</span> xg</span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.compose <span class="im">import</span> ColumnTransformer</span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> OneHotEncoder</span></code><button title="Копіювати" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -645,7 +645,7 @@ Shrink model to first 482 iterations.</code></pre>
 </section>
 <section id="підготовка-даних" class="level3" data-number="2.2.2">
 <h3 data-number="2.2.2" class="anchored" data-anchor-id="підготовка-даних"><span class="header-section-number">2.2.2</span> Підготовка даних</h3>
-<div class="cell" data-execution_count="10">
+<div class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>train[train.select_dtypes([<span class="st">'object'</span>]).columns] <span class="op">=</span> train.select_dtypes([<span class="st">'object'</span>]).<span class="bu">apply</span>(<span class="kw">lambda</span> x: x.astype(<span class="st">'category'</span>))</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>test[test.select_dtypes([<span class="st">'object'</span>]).columns] <span class="op">=</span> test.select_dtypes([<span class="st">'object'</span>]).<span class="bu">apply</span>(<span class="kw">lambda</span> x: x.astype(<span class="st">'category'</span>))</span>
@@ -658,7 +658,7 @@ Shrink model to first 482 iterations.</code></pre>
 </section>
 <section id="навчання-моделі" class="level3" data-number="2.2.3">
 <h3 data-number="2.2.3" class="anchored" data-anchor-id="навчання-моделі"><span class="header-section-number">2.2.3</span> Навчання моделі</h3>
-<div class="cell" data-execution_count="11">
+<div class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>xgb_r <span class="op">=</span> xg.XGBRegressor(tree_method<span class="op">=</span><span class="st">"gpu_hist"</span>, enable_categorical<span class="op">=</span><span class="va">True</span>, seed<span class="op">=</span><span class="dv">2023</span>)</span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>xgb_r.fit(X_train, y_train)</span></code><button title="Копіювати" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -689,7 +689,7 @@ Shrink model to first 482 iterations.</code></pre>
 </section>
 <section id="оцінка-моделі-1" class="level3" data-number="2.2.4">
 <h3 data-number="2.2.4" class="anchored" data-anchor-id="оцінка-моделі-1"><span class="header-section-number">2.2.4</span> Оцінка моделі</h3>
-<div class="cell" data-execution_count="12">
+<div class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>y_pred <span class="op">=</span> xgb_r.predict(X_test)</span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>mae_xgboost <span class="op">=</span> mean_absolute_error(y_test, y_pred)</span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f'</span><span class="ch">\n</span><span class="ss"> MAE: </span><span class="sc">{</span>mae_xgboost<span class="sc">}</span><span class="ss">'</span>)</span></code><button title="Копіювати" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -701,7 +701,7 @@ Shrink model to first 482 iterations.</code></pre>
 </section>
 <section id="оцінка-важливості-ознак-1" class="level3" data-number="2.2.5">
 <h3 data-number="2.2.5" class="anchored" data-anchor-id="оцінка-важливості-ознак-1"><span class="header-section-number">2.2.5</span> Оцінка важливості ознак</h3>
-<div class="cell" data-execution_count="13">
+<div class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>xg.plot_importance(xgb_r, importance_type<span class="op">=</span><span class="st">"gain"</span>)</span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Копіювати" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
@@ -714,13 +714,13 @@ Shrink model to first 482 iterations.</code></pre>
 <h2 data-number="2.3" class="anchored" data-anchor-id="lightgbm"><span class="header-section-number">2.3</span> LightGBM</h2>
 <section id="імпорт-бібліотек-2" class="level3" data-number="2.3.1">
 <h3 data-number="2.3.1" class="anchored" data-anchor-id="імпорт-бібліотек-2"><span class="header-section-number">2.3.1</span> Імпорт бібліотек</h3>
-<div class="cell" data-execution_count="14">
+<div class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> lightgbm <span class="im">as</span> lgb</span></code><button title="Копіювати" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="параметри-моделі" class="level3" data-number="2.3.2">
 <h3 data-number="2.3.2" class="anchored" data-anchor-id="параметри-моделі"><span class="header-section-number">2.3.2</span> Параметри моделі</h3>
-<div class="cell" data-execution_count="15">
+<div class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>params <span class="op">=</span> {</span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">'task'</span>: <span class="st">'train'</span>, </span>
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">'boosting'</span>: <span class="st">'gbdt'</span>,</span>
@@ -732,14 +732,14 @@ Shrink model to first 482 iterations.</code></pre>
 </section>
 <section id="підготовка-даних-1" class="level3" data-number="2.3.3">
 <h3 data-number="2.3.3" class="anchored" data-anchor-id="підготовка-даних-1"><span class="header-section-number">2.3.3</span> Підготовка даних</h3>
-<div class="cell" data-execution_count="16">
+<div class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>lgb_train <span class="op">=</span> lgb.Dataset(X_train, y_train)</span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>lgb_eval <span class="op">=</span> lgb.Dataset(X_test, y_test, reference<span class="op">=</span>lgb_train)</span></code><button title="Копіювати" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="навчання-моделі-1" class="level3" data-number="2.3.4">
 <h3 data-number="2.3.4" class="anchored" data-anchor-id="навчання-моделі-1"><span class="header-section-number">2.3.4</span> Навчання моделі</h3>
-<div class="cell" data-execution_count="17">
+<div class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>lgb_r <span class="op">=</span> lgb.train(params,</span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>                 train_set<span class="op">=</span>lgb_train,</span>
 <span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>                 valid_sets<span class="op">=</span>lgb_eval)</span></code><button title="Копіювати" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -747,7 +747,7 @@ Shrink model to first 482 iterations.</code></pre>
 </section>
 <section id="оцінка-моделі-2" class="level3" data-number="2.3.5">
 <h3 data-number="2.3.5" class="anchored" data-anchor-id="оцінка-моделі-2"><span class="header-section-number">2.3.5</span> Оцінка моделі</h3>
-<div class="cell" data-execution_count="19">
+<div class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>y_pred <span class="op">=</span> lgb_r.predict(X_test)</span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>mae_lbg <span class="op">=</span> mean_absolute_error(y_test, y_pred)</span>
@@ -759,7 +759,7 @@ Shrink model to first 482 iterations.</code></pre>
 </section>
 <section id="важливість-ознак" class="level3" data-number="2.3.6">
 <h3 data-number="2.3.6" class="anchored" data-anchor-id="важливість-ознак"><span class="header-section-number">2.3.6</span> Важливість ознак</h3>
-<div class="cell" data-execution_count="20">
+<div class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>df_feature_importance <span class="op">=</span> (</span>
 <span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>    pd.DataFrame({</span>
 <span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>        <span class="st">'feature'</span>: lgb_r.feature_name(),</span>
@@ -854,11 +854,11 @@ Shrink model to first 482 iterations.</code></pre>
 </div>
 </section>
 </section>
-<section id="висновки-та-про-позиції" class="level2" data-number="2.4">
-<h2 data-number="2.4" class="anchored" data-anchor-id="висновки-та-про-позиції"><span class="header-section-number">2.4</span> Висновки та про позиції</h2>
+<section id="висновки-та-пропозиції" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="висновки-та-пропозиції"><span class="header-section-number">2.4</span> Висновки та пропозиції</h2>
 <section id="загальний-підсумок-ефективності-моделей" class="level3" data-number="2.4.1">
 <h3 data-number="2.4.1" class="anchored" data-anchor-id="загальний-підсумок-ефективності-моделей"><span class="header-section-number">2.4.1</span> Загальний підсумок ефективності моделей:</h3>
-<div class="cell" data-execution_count="21">
+<div class="cell" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>mae_score <span class="op">=</span> {<span class="st">'Модель'</span>: [<span class="st">'CatBoost'</span>, <span class="st">'XGBoost'</span>, <span class="st">'LightGBM'</span>],</span>
 <span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>            <span class="st">'MAE'</span>: [mae_catboost, mae_xgboost, mae_lbg]}</span>
 <span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -880,7 +880,7 @@ Shrink model to first 482 iterations.</code></pre>
     <tr>
       <th>0</th>
       <td>CatBoost</td>
-      <td>3336.672052</td>
+      <td>3433.541171</td>
     </tr>
     <tr>
       <th>1</th>
@@ -897,7 +897,7 @@ Shrink model to first 482 iterations.</code></pre>
 </div>
 </div>
 </div>
-<div class="cell" data-execution_count="22">
+<div class="cell" data-execution_count="23">
 <div class="cell-output cell-output-display" data-execution_count="21">
 <p>Загалом, всі моделі показують приблизно однаковий результат. Але найкращий результат показав <code>LightGBM</code> з показником 2924.99. Ймовірно це пов’язано з тим, що модель змогла краще оцінити важливість ознак, особливо <code>model</code> та <code>brand</code>.</p>
 </div>
