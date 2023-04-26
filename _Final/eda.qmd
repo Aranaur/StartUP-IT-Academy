@@ -18,6 +18,8 @@ import plotly.graph_objects as go
 from scipy.interpolate import griddata
 from plotnine import *
 
+from sklearn.model_selection import train_test_split
+
 import warnings
 warnings.filterwarnings("ignore")
 ```
@@ -51,29 +53,40 @@ df = pd.read_csv('00_data/cars.csv')
 df.head()
 ```
 
+## Первинний аналіз даних
+Загальна інформація про датасет
 ```{python}
 df.info()
 ```
 
+Опис числових змінних
 ```{python}
 df.describe()
 ```
 
+Кількість пропущених значень
 ```{python}
 df.isna().sum()
 ```
 
+Кількість автомобілів за типом палива
 ```{python}
 df.fuel.value_counts()
 ```
+
+Кількість представлених брендів
 ```{python}
 df["brand"].nunique()
 ```
 
+Найпопулярніші бренди
 ```{python}
 df['brand'].value_counts().head()
 ```
 
+## Візуалізація даних
+
+### Топ популярних та непопулярних брендів
 ```{python}
 #| column: screen-inset-shaded
 #| layout-nrow: 1
@@ -97,6 +110,9 @@ fig.update_layout(xaxis_title="Кількість", yaxis_title="", plot_bgcolor
 fig.show()
 ```
 
+### Топ-5 популярних моделей для популярних брендів
+
+Створемо функцію знаходження топ-5 популярних моделей для популярних брендів.
 ```{python}
 def get_top_models(df, brand, top_n=5):
     # Відфільтровуємо за брендом
@@ -111,37 +127,36 @@ def get_top_models(df, brand, top_n=5):
     return top_models
 ```
 
+Фільтрація даних за брендом та знаходження топ-5 популярних моделей для популярних брендів.
 ```{python}
 top5_vw_models = get_top_models(df, "VOLKSWAGEN")
 top5_bmw_models = get_top_models(df, "BMW")
 top5_mers_models = get_top_models(df, "MERCEDES-BENZ")
 ```
 
-
 ```{python}
 #| layout-ncol: 3
-#| fig-cap: 
-#|   - "Volkswagen"
-#|   - "BMW"
-#|   - "Mercedes-Benz"
 #| column: page
 volk = sns.catplot(y='model', x='count', data=top5_vw_models, kind='bar',
-palette='PRGn', alpha=0.5, legend=False)
+palette='rocket', alpha=0.5, legend=False)
 volk.set(xlabel='Кількість', ylabel='Модель автомобіля', title='Volkswagen')
 volk.fig.suptitle("")
 
 bmw = sns.catplot(y='model', x='count', data=top5_bmw_models, kind='bar',
-palette='Spectral', alpha=0.5, legend=False)
+palette='rocket', alpha=0.5, legend=False)
 bmw.set(xlabel='Кількість', ylabel='Модель автомобіля', title='BMW')
 bmw.fig.suptitle("")
 
 mb = sns.catplot(y='model', x='count', data=top5_mers_models, kind='bar',
-palette='BrBG', alpha=0.5, legend=False)
+palette='rocket', alpha=0.5, legend=False)
 mb.set(xlabel='Кількість', ylabel='Модель автомобіля', title='Mercedes-Benz')
 mb.fig.suptitle("")
 plt.show()
 ```
 
+### Heatmap регіонів України за відсоток представлених автомобілів
+
+Сформуємо таблицю з регіонами України.
 ```{python}
 uaRegionsGrid = pd.DataFrame({
 'row': [1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 5, 5],
@@ -155,6 +170,7 @@ data_region_quantity['percent'] = (data_region_quantity['count'] / data_region_q
 uaCarsQuantity = uaRegionsGrid.merge(data_region_quantity, left_on='name', right_on='region', how='left')
 ```
 
+Візуалізація heatmap регіонів України за відсоток представлених автомобілів.
 ```{python}
 #| fig-cap: "Відсоток представлених автомобілів в регіонах України"
 data = np.asarray(uaCarsQuantity.pivot("row", "col", "percent"))
@@ -168,12 +184,14 @@ sns.heatmap(data,
     linewidths=.5,
     fmt='',
     ax=ax,
+    cmap=sns.color_palette("BuPu"),
     yticklabels=False,
     xticklabels=False,
     cbar=False)
 plt.show()
 ```
 
+### Розподіл цін на автомобілі в залежності від типу коробки передач
 ```{python}
 f, ax = plt.subplots(figsize=(8, 6))
 ax=pt.RainCloud(x = df.gearbox, y = df.price_log, data = df, bw =  0.2, width_viol = 0.9,
@@ -182,8 +200,10 @@ ax=pt.RainCloud(x = df.gearbox, y = df.price_log, data = df, bw =  0.2, width_vi
                 alpha = .65, dodge = True,
                 pointplot = True, move = .2)
 ax.set_ylabel('')
+plt.show()
 ```
 
+### Розподіл пробігу автомобіля в залежності від типу коробки передач
 ```{python}
 f, ax = plt.subplots(figsize=(8, 6))
 ax=pt.RainCloud(x = df.gearbox, y = np.log1p(df.mileage),
@@ -195,6 +215,7 @@ ax.set_ylabel('')
 plt.show()
 ```
 
+### Гребнева візуалізація розподілу цін та пробігу в залежності від віку автомобіля
 ```{python}
 #| layout-ncol: 2
 #| column: page
@@ -215,7 +236,7 @@ fig, axes = joypy.joyplot(df, by="age", column='mileage',
 plt.show()
 ```
 
-
+### Точкова діаграма цін на автомобілі в залежності року випуску, пробігу та типу коробки передач
 ```{python}
 sns.scatterplot(x="make_year", y="price_log",
                 hue="gearbox", data=df,
@@ -223,14 +244,8 @@ sns.scatterplot(x="make_year", y="price_log",
 plt.show()
 ```
 
+### 3D візуалізація залежності ціни автомобіля від року випуску та пробігу
 ```{python}
-sns.histplot(data=df, x="price_log", hue="accident",
-                palette="mako", kde=True, alpha=0.5)
-plt.show()
-```
-
-```{python}
-
 x = np.array(df.make_year)
 y = np.array(df.mileage)
 z = np.array(np.log(df.price))
@@ -252,7 +267,7 @@ fig.update_layout(scene=dict(
 fig.show()
 ```
 
-
+### Кореляційна матриця
 ```{python}
 corr_matrix = df.corr()
 
@@ -279,59 +294,9 @@ ax.set_xticklabels(corr_matrix.columns)
 sns.set_style({'xtick.bottom': True}, {'ytick.left': True})
 ```
 
-## Дані з data.gov.ua
-
+### Спліт даних на тренувальні та тестові для подальшої роботи
 ```{python}
-#| column: screen-inset-shaded
-#| tbl-cap: 'Вхідні дані'
-df_gov = pd.read_csv('00_data/cars_region_brand.csv')
-df_gov.head()
-```
-
-```{python}
-def reduce_mem_usage(df):
-    start_mem = df.memory_usage().sum() / 1024**2
-    print('Memory usage of dataframe is {:.2f} MB'.format(start_mem))
-    for col in df.columns:
-        col_type = df[col].dtype
-        
-        if col_type != object:
-            c_min = df[col].min()
-            c_max = df[col].max()
-            if str(col_type)[:3] == 'int':
-                if c_min > np.iinfo(np.int8).min and c_max < np.iinfo(np.int8).max:
-                    df[col] = df[col].astype(np.int8)
-                elif c_min > np.iinfo(np.int16).min and c_max < np.iinfo(np.int16).max:
-                    df[col] = df[col].astype(np.int16)
-                elif c_min > np.iinfo(np.int32).min and c_max < np.iinfo(np.int32).max:
-                    df[col] = df[col].astype(np.int32)
-                elif c_min > np.iinfo(np.int64).min and c_max < np.iinfo(np.int64).max:
-                    df[col] = df[col].astype(np.int64)  
-            else:
-                if c_min > np.finfo(np.float16).min and c_max < np.finfo(np.float16).max:
-                    df[col] = df[col].astype(np.float16)
-                elif c_min > np.finfo(np.float32).min and c_max < np.finfo(np.float32).max:
-                    df[col] = df[col].astype(np.float32)
-                else:
-                    df[col] = df[col].astype(np.float64)
-        else:
-            df[col] = df[col].astype('category')
-
-    end_mem = df.memory_usage().sum() / 1024**2
-    print('Memory usage after optimization is: {:.2f} MB'.format(end_mem))
-    print('Decreased by {:.1f}%'.format(100 * (start_mem - end_mem) / start_mem))
-    
-    return df
-```
-
-```{python}
-df = reduce_mem_usage(df)
-df_gov = reduce_mem_usage(df_gov)
-```
-
-```{python}
-#| column: screen-inset-shaded
-#| tbl-cap: 'Вхідні дані'
-df_merge = pd.merge(df, df_gov,  how='left', on=['brand', 'model', 'make_year', 'fuel'])
-df_merge
+train, test = train_test_split(df, test_size=0.2, random_state=2023, shuffle=True)
+train.to_csv('00_data_clean/train.csv', index=False)
+test.to_csv('00_data_clean/test.csv', index=False)
 ```

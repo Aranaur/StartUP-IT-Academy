@@ -10,8 +10,7 @@ book:
   chapters:
     - index.qmd
     - eda.qmd
-    - summary.qmd
-    - references.qmd
+    - model.qmd
 
 language: _language-ukr.yml
 
@@ -23,6 +22,11 @@ format:
     theme:
       light: cosmo
       dark: superhero
+
+execute:
+  cache: true
+  warning: false
+  message: false
 
 
 

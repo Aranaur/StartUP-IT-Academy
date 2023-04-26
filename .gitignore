@@ -20,3 +20,9 @@ Lesson_68/runs
 /_Final/00_data/cars.csv
 /_Final/00_data/cars_region_brand.csv
 /_Final/00_data/cars_region_brand_2.parquet
+/_Final/00_data
+/_Final/00_data_clean
+/_Final/catboost_info
+/_Final/model_cache
+/_Final/.jupyter_cache
+/_Final/00_data/old
