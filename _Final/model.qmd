@@ -1,0 +1,211 @@
+# Прогнозування ціни автомобіля
+
+## Catboost
+
+### Імпорт бібліотек
+
+```{python}
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+from catboost import CatBoostRegressor
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_absolute_error
+import lightgbm as lgb
+from sklearn.preprocessing import LabelEncoder
+from lightgbm import LGBMRegressor, train
+
+from IPython.display import Markdown
+```
+
+### Завантаження даних
+
+```{python}
+#| column: screen-inset-shaded
+#| tbl-cap: 'Вхідні дані'
+train = pd.read_csv('00_data_clean/train.csv')
+
+train.sample(3)
+```
+
+```{python}
+#| column: screen-inset-shaded
+#| tbl-cap: 'Вхідні дані'
+test = pd.read_csv('00_data_clean/test.csv')
+
+test.sample(3)
+```
+
+### Класифікуємо ознаки на типи
+```{python}
+features2drop = ['full_name', 'desc', 'price_log']
+targets = ['price']
+cat_features = ['brand', 'model', 'location', 'region', 'fuel', 'gearbox', 'drive', 'accident', 'vin']
+
+filtered_features = [i for i in train.columns if (i not in targets and i not in features2drop)]
+num_features = [i for i in filtered_features if i not in cat_features]
+
+print('cat_features :', len(cat_features), cat_features)
+print('num_features :', len(num_features), num_features)
+print('targets', targets)
+```
+
+### Навчаємо Catboost та робимо прогноз на тестових даних
+```{python}
+X = train[filtered_features].drop(targets, axis=1, errors='ignore')
+y = train['price']
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, 
+                                                    random_state=2023)
+```
+
+```{python}
+cat_r = CatBoostRegressor(cat_features=cat_features, task_type="GPU",
+                        random_seed=2023)
+
+cat_r.fit(X_train, y_train, 
+          eval_set=(X_test, y_test),
+          verbose=150, plot=False)
+```
+
+### Оцінка моделі
+```{python}
+y_pred = cat_r.predict(X_test)
+mae_catboost = mean_absolute_error(y_test, y_pred)
+print(f'\n MAE: {mae_catboost}')
+```
+
+### Оцінка важливості ознак
+```{python}
+cat_r.get_feature_importance(prettified=True, type='FeatureImportance')
+```
+
+## XGBoost
+
+### Імпорт бібліотек
+```{python}
+import xgboost as xg
+from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import OneHotEncoder
+```
+
+### Підготовка даних
+```{python}
+train[train.select_dtypes(['object']).columns] = train.select_dtypes(['object']).apply(lambda x: x.astype('category'))
+
+test[test.select_dtypes(['object']).columns] = test.select_dtypes(['object']).apply(lambda x: x.astype('category'))
+
+X = train[filtered_features].drop(targets, axis=1, errors='ignore')
+y = train['price']
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=2023)
+```
+
+### Навчання моделі
+```{python}
+xgb_r = xg.XGBRegressor(tree_method="gpu_hist", enable_categorical=True, seed=2023)
+
+xgb_r.fit(X_train, y_train)
+```
+
+### Оцінка моделі
+```{python}
+y_pred = xgb_r.predict(X_test)
+mae_xgboost = mean_absolute_error(y_test, y_pred)
+print(f'\n MAE: {mae_xgboost}')
+```
+
+### Оцінка важливості ознак
+```{python}
+xg.plot_importance(xgb_r, importance_type="gain")
+plt.show()
+```
+
+## LightGBM
+
+### Імпорт бібліотек
+```{python}
+import lightgbm as lgb
+```
+
+### Параметри моделі
+```{python}
+params = {
+    'task': 'train', 
+    'boosting': 'gbdt',
+    'objective': 'regression',
+    'metric': 'mae',
+    'seed': 2023
+}
+```
+
+### Підготовка даних
+```{python}
+lgb_train = lgb.Dataset(X_train, y_train)
+lgb_eval = lgb.Dataset(X_test, y_test, reference=lgb_train)
+```
+
+### Навчання моделі
+```{python}
+#| eval: false
+lgb_r = lgb.train(params,
+                 train_set=lgb_train,
+                 valid_sets=lgb_eval)
+```
+
+```{python}
+#| include: false
+lgb_r = lgb.train(params,
+                 train_set=lgb_train,
+                 valid_sets=lgb_eval)
+```
+
+### Оцінка моделі
+```{python}
+y_pred = lgb_r.predict(X_test)
+
+mae_lbg = mean_absolute_error(y_test, y_pred)
+print("MAE: %.2f" % mae_lbg)
+```
+
+### Важливість ознак
+```{python}
+df_feature_importance = (
+    pd.DataFrame({
+        'feature': lgb_r.feature_name(),
+        'importance': lgb_r.feature_importance(),
+    })
+    .sort_values('importance', ascending=False)
+)
+
+df_feature_importance
+```
+
+## Висновки та про позиції
+### Загальний підсумок ефективності моделей:
+```{python}
+mae_score = {'Модель': ['CatBoost', 'XGBoost', 'LightGBM'],
+            'MAE': [mae_catboost, mae_xgboost, mae_lbg]}
+
+mae_score_df = pd.DataFrame(data=mae_score)
+mae_score_df
+```
+
+```{python}
+#| echo: false
+
+Markdown((f"""
+Загалом, всі моделі показують приблизно однаковий результат. Але найкращий результат показав `LightGBM` з показником {round(mae_lbg, 2)}. Ймовірно це пов'язано з тим, що модель змогла краще оцінити важливість ознак, особливо `model` та `brand`.
+"""
+))
+```
+
+### Пропозиції щодо подальшого дослідження та підвищення ефективності:
+
+- використання даних з [data.gov.ua](https://data.gov.ua/);
+- парсинг зовнішніх даних та формування додаткових ознак, наприклад кольору, типу кузова та інших;
+- автоматична генерація та фільтрація ознак;
+- використання більшої кількості моделей та їх блендінг;
+- обробка опису оголошення методами NLP та використання його як додаткової ознаки;
+- оптимізація пам'яті та прискорення обчислень
