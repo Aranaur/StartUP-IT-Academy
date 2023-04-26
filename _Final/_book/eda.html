@@ -95,6 +95,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <meta name="quarto:offset" content="./">
 <link href="./model.html" rel="next">
 <link href="./index.html" rel="prev">
+<link href="./cover.png" rel="icon" type="image/png">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -165,7 +166,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="./index.html" class="sidebar-logo-link">
+      <img src="./cover.png" alt="" class="sidebar-logo py-0 d-lg-inline d-none">
+      </a>
     <div class="sidebar-title mb-0 py-0">
       <a href="./">Аналіз автомобільного ринку України</a> 
         <div class="sidebar-tools-main">
@@ -245,7 +249,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <section id="імпорт-бібліотек" class="level2" data-number="1.1">
 <h2 data-number="1.1" class="anchored" data-anchor-id="імпорт-бібліотек"><span class="header-section-number">1.1</span> Імпорт бібліотек</h2>
-<div class="cell" data-execution_count="1">
+<div class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> datetime</span>
@@ -288,7 +292,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><code>vin</code> – VIN-code (перевірений VIN-code чи ні);</li>
 <li><code>desc</code> – опис оголошення.</li>
 </ol>
-<div class="cell page-columns page-full" data-execution_count="2">
+<div class="cell page-columns page-full" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">'00_data/cars.csv'</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>df.head()</span></code><button title="Копіювати" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display column-screen-inset-shaded" data-execution_count="2">
@@ -428,7 +432,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <section id="первинний-аналіз-даних" class="level2" data-number="1.3">
 <h2 data-number="1.3" class="anchored" data-anchor-id="первинний-аналіз-даних"><span class="header-section-number">1.3</span> Первинний аналіз даних</h2>
 <p>Загальна інформація про датасет</p>
-<div class="cell" data-execution_count="3">
+<div class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>df.info()</span></code><button title="Копіювати" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>&lt;class 'pandas.core.frame.DataFrame'&gt;
@@ -458,7 +462,7 @@ memory usage: 5.5+ MB</code></pre>
 </div>
 </div>
 <p>Опис числових змінних</p>
-<div class="cell" data-execution_count="4">
+<div class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>df.describe()</span></code><button title="Копіювати" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="4">
 
@@ -555,7 +559,7 @@ memory usage: 5.5+ MB</code></pre>
 </div>
 </div>
 <p>Кількість пропущених значень</p>
-<div class="cell" data-execution_count="5">
+<div class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>df.isna().<span class="bu">sum</span>()</span></code><button title="Копіювати" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="5">
 <pre><code>price        0
@@ -579,7 +583,7 @@ dtype: int64</code></pre>
 </div>
 </div>
 <p>Кількість автомобілів за типом палива</p>
-<div class="cell" data-execution_count="6">
+<div class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>df.fuel.value_counts()</span></code><button title="Копіювати" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="6">
 <pre><code>БЕНЗИН        19364
@@ -592,14 +596,14 @@ Name: fuel, dtype: int64</code></pre>
 </div>
 </div>
 <p>Кількість представлених брендів</p>
-<div class="cell" data-execution_count="7">
+<div class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"brand"</span>].nunique()</span></code><button title="Копіювати" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="7">
 <pre><code>118</code></pre>
 </div>
 </div>
 <p>Найпопулярніші бренди</p>
-<div class="cell" data-execution_count="8">
+<div class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'brand'</span>].value_counts().head()</span></code><button title="Копіювати" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="8">
 <pre><code>VOLKSWAGEN       4371
@@ -633,7 +637,7 @@ Name: brand, dtype: int64</code></pre>
 <span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>fig.update_layout(xaxis_title<span class="op">=</span><span class="st">"Кількість"</span>, yaxis_title<span class="op">=</span><span class="st">""</span>, plot_bgcolor<span class="op">=</span><span class="st">'rgba(0,0,0,0)'</span>)</span>
 <span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>fig.show()</span></code><button title="Копіювати" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell column-screen-inset-shaded quarto-layout-panel" data-execution_count="9">
+<div class="cell column-screen-inset-shaded quarto-layout-panel" data-execution_count="10">
 <div class="quarto-layout-row quarto-layout-valign-top">
 <div class="cell-output cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
 
@@ -698,7 +702,7 @@ if (outputEl) {{
 <section id="топ-5-популярних-моделей-для-популярних-брендів" class="level3 page-columns page-full" data-number="1.4.2">
 <h3 data-number="1.4.2" class="anchored" data-anchor-id="топ-5-популярних-моделей-для-популярних-брендів"><span class="header-section-number">1.4.2</span> Топ-5 популярних моделей для популярних брендів</h3>
 <p>Створемо функцію знаходження топ-5 популярних моделей для популярних брендів.</p>
-<div class="cell" data-execution_count="10">
+<div class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_top_models(df, brand, top_n<span class="op">=</span><span class="dv">5</span>):</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Відфільтровуємо за брендом</span></span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    df_brand <span class="op">=</span> df[df[<span class="st">"brand"</span>] <span class="op">==</span> brand]</span>
@@ -712,7 +716,7 @@ if (outputEl) {{
 <span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> top_models</span></code><button title="Копіювати" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Фільтрація даних за брендом та знаходження топ-5 популярних моделей для популярних брендів.</p>
-<div class="cell" data-execution_count="11">
+<div class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>top5_vw_models <span class="op">=</span> get_top_models(df, <span class="st">"VOLKSWAGEN"</span>)</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>top5_bmw_models <span class="op">=</span> get_top_models(df, <span class="st">"BMW"</span>)</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>top5_mers_models <span class="op">=</span> get_top_models(df, <span class="st">"MERCEDES-BENZ"</span>)</span></code><button title="Копіювати" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -733,7 +737,7 @@ if (outputEl) {{
 <span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>mb.<span class="bu">set</span>(xlabel<span class="op">=</span><span class="st">'Кількість'</span>, ylabel<span class="op">=</span><span class="st">'Модель автомобіля'</span>, title<span class="op">=</span><span class="st">'Mercedes-Benz'</span>)</span>
 <span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>mb.fig.suptitle(<span class="st">""</span>)</span>
 <span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Копіювати" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell column-page quarto-layout-panel" data-execution_count="12">
+<div class="cell column-page quarto-layout-panel" data-execution_count="13">
 <div class="quarto-layout-row quarto-layout-valign-top">
 <div class="cell-output cell-output-display quarto-layout-cell" style="flex-basis: 33.3%;justify-content: center;">
 <p><img src="eda_files/figure-html/cell-13-output-1.png" class="img-fluid" width="488"></p>
@@ -751,7 +755,7 @@ if (outputEl) {{
 <section id="heatmap-регіонів-україни-за-відсоток-представлених-автомобілів" class="level3" data-number="1.4.3">
 <h3 data-number="1.4.3" class="anchored" data-anchor-id="heatmap-регіонів-україни-за-відсоток-представлених-автомобілів"><span class="header-section-number">1.4.3</span> Heatmap регіонів України за відсоток представлених автомобілів</h3>
 <p>Сформуємо таблицю з регіонами України.</p>
-<div class="cell" data-execution_count="13">
+<div class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>uaRegionsGrid <span class="op">=</span> pd.DataFrame({</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="st">'row'</span>: [<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">5</span>],</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="st">'col'</span>: [<span class="dv">2</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">2</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">5</span>],</span>
@@ -764,7 +768,7 @@ if (outputEl) {{
 <span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>uaCarsQuantity <span class="op">=</span> uaRegionsGrid.merge(data_region_quantity, left_on<span class="op">=</span><span class="st">'name'</span>, right_on<span class="op">=</span><span class="st">'region'</span>, how<span class="op">=</span><span class="st">'left'</span>)</span></code><button title="Копіювати" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Візуалізація heatmap регіонів України за відсоток представлених автомобілів.</p>
-<div class="cell" data-execution_count="14">
+<div class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> np.asarray(uaCarsQuantity.pivot(<span class="st">"row"</span>, <span class="st">"col"</span>, <span class="st">"percent"</span>))</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>text <span class="op">=</span> np.asarray(uaCarsQuantity.pivot(<span class="st">"row"</span>, <span class="st">"col"</span>, <span class="st">"region"</span>))</span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>labels <span class="op">=</span> (np.asarray([<span class="st">"</span><span class="sc">{0}</span><span class="ch">\n</span><span class="sc">{1:.2f}</span><span class="st">"</span>.<span class="bu">format</span>(text,data) <span class="cf">for</span> text, data <span class="kw">in</span> <span class="bu">zip</span>(text.flatten(), data.flatten())])).reshape(<span class="dv">5</span>,<span class="dv">8</span>)</span>
@@ -793,7 +797,7 @@ if (outputEl) {{
 </section>
 <section id="розподіл-цін-на-автомобілі-в-залежності-від-типу-коробки-передач" class="level3" data-number="1.4.4">
 <h3 data-number="1.4.4" class="anchored" data-anchor-id="розподіл-цін-на-автомобілі-в-залежності-від-типу-коробки-передач"><span class="header-section-number">1.4.4</span> Розподіл цін на автомобілі в залежності від типу коробки передач</h3>
-<div class="cell" data-execution_count="15">
+<div class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>f, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>))</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>ax<span class="op">=</span>pt.RainCloud(x <span class="op">=</span> df.gearbox, y <span class="op">=</span> df.price_log, data <span class="op">=</span> df, bw <span class="op">=</span>  <span class="fl">0.2</span>, width_viol <span class="op">=</span> <span class="fl">0.9</span>,</span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>                ax <span class="op">=</span> ax, orient <span class="op">=</span> <span class="st">"h"</span> , linewidth<span class="op">=</span><span class="fl">0.1</span>,</span>
@@ -809,7 +813,7 @@ if (outputEl) {{
 </section>
 <section id="розподіл-пробігу-автомобіля-в-залежності-від-типу-коробки-передач" class="level3" data-number="1.4.5">
 <h3 data-number="1.4.5" class="anchored" data-anchor-id="розподіл-пробігу-автомобіля-в-залежності-від-типу-коробки-передач"><span class="header-section-number">1.4.5</span> Розподіл пробігу автомобіля в залежності від типу коробки передач</h3>
-<div class="cell" data-execution_count="16">
+<div class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>f, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>))</span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>ax<span class="op">=</span>pt.RainCloud(x <span class="op">=</span> df.gearbox, y <span class="op">=</span> np.log1p(df.mileage),</span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>                bw <span class="op">=</span> <span class="fl">0.2</span>, width_viol <span class="op">=</span> <span class="fl">0.9</span>,</span>
@@ -841,7 +845,7 @@ if (outputEl) {{
 <span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>                            kind<span class="op">=</span><span class="st">"counts"</span>)</span>
 <span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Копіювати" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell column-page quarto-layout-panel" data-execution_count="17">
+<div class="cell column-page quarto-layout-panel" data-execution_count="18">
 <div class="quarto-layout-row quarto-layout-valign-top">
 <div class="cell-output cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
 <p><img src="eda_files/figure-html/cell-18-output-1.png" class="img-fluid" width="670"></p>
@@ -855,7 +859,7 @@ if (outputEl) {{
 </section>
 <section id="точкова-діаграма-цін-на-автомобілі-в-залежності-року-випуску-пробігу-та-типу-коробки-передач" class="level3" data-number="1.4.7">
 <h3 data-number="1.4.7" class="anchored" data-anchor-id="точкова-діаграма-цін-на-автомобілі-в-залежності-року-випуску-пробігу-та-типу-коробки-передач"><span class="header-section-number">1.4.7</span> Точкова діаграма цін на автомобілі в залежності року випуску, пробігу та типу коробки передач</h3>
-<div class="cell" data-execution_count="18">
+<div class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>sns.scatterplot(x<span class="op">=</span><span class="st">"make_year"</span>, y<span class="op">=</span><span class="st">"price_log"</span>,</span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>                hue<span class="op">=</span><span class="st">"gearbox"</span>, data<span class="op">=</span>df,</span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>                size<span class="op">=</span><span class="st">'mileage'</span>, alpha<span class="op">=</span><span class="fl">0.5</span>)</span>
@@ -867,7 +871,7 @@ if (outputEl) {{
 </section>
 <section id="d-візуалізація-залежності-ціни-автомобіля-від-року-випуску-та-пробігу" class="level3" data-number="1.4.8">
 <h3 data-number="1.4.8" class="anchored" data-anchor-id="d-візуалізація-залежності-ціни-автомобіля-від-року-випуску-та-пробігу"><span class="header-section-number">1.4.8</span> 3D візуалізація залежності ціни автомобіля від року випуску та пробігу</h3>
-<div class="cell" data-execution_count="19">
+<div class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.array(df.make_year)</span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> np.array(df.mileage)</span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>z <span class="op">=</span> np.array(np.log(df.price))</span>
@@ -919,7 +923,7 @@ if (outputEl) {{
 </section>
 <section id="кореляційна-матриця" class="level3" data-number="1.4.9">
 <h3 data-number="1.4.9" class="anchored" data-anchor-id="кореляційна-матриця"><span class="header-section-number">1.4.9</span> Кореляційна матриця</h3>
-<div class="cell" data-execution_count="20">
+<div class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>corr_matrix <span class="op">=</span> df.corr()</span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>mask <span class="op">=</span> np.zeros_like(corr_matrix, dtype<span class="op">=</span>np.<span class="bu">bool</span>)</span>
@@ -950,7 +954,7 @@ if (outputEl) {{
 </section>
 <section id="спліт-даних-на-тренувальні-та-тестові-для-подальшої-роботи" class="level3" data-number="1.4.10">
 <h3 data-number="1.4.10" class="anchored" data-anchor-id="спліт-даних-на-тренувальні-та-тестові-для-подальшої-роботи"><span class="header-section-number">1.4.10</span> Спліт даних на тренувальні та тестові для подальшої роботи</h3>
-<div class="cell" data-execution_count="21">
+<div class="cell" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>train, test <span class="op">=</span> train_test_split(df, test_size<span class="op">=</span><span class="fl">0.2</span>, random_state<span class="op">=</span><span class="dv">2023</span>, shuffle<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>train.to_csv(<span class="st">'00_data_clean/train.csv'</span>, index<span class="op">=</span><span class="va">False</span>)</span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>test.to_csv(<span class="st">'00_data_clean/test.csv'</span>, index<span class="op">=</span><span class="va">False</span>)</span></code><button title="Копіювати" class="code-copy-button"><i class="bi"></i></button></pre></div>

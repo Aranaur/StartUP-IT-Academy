@@ -5,8 +5,12 @@ book:
   title: "Аналіз автомобільного ринку України"
   subtitle: "Фінальний проєкт до курсу 'Python for Data Science' від StartUp IT Academy"
   author: "Ігор Мірошниченко"
+  favicon: cover.png
   date: today
   date-format: iso
+  sidebar: 
+    logo: cover.png
+    search: true
   chapters:
     - index.qmd
     - eda.qmd
